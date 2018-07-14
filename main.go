@@ -18,16 +18,18 @@ func main() {
 		log.Fatalln("google-cloud-sdk is not authentificated to any account")
 	}
 
-	account := ""
-	survey.AskOne(
-		&survey.Select{
-			Message: "Choose an account:",
-			Options: accs,
-		},
-		&account,
-		nil,
-	)
-	gcloud.SelectAccount(account)
+	if len(accs) > 1 {
+		account := ""
+		survey.AskOne(
+			&survey.Select{
+				Message: "Choose an account:",
+				Options: accs,
+			},
+			&account,
+			nil,
+		)
+		gcloud.SelectAccount(account)
+	}
 
 	projects, err := gcloud.ReadProjects()
 	if err != nil {
