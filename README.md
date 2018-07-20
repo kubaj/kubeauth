@@ -9,7 +9,7 @@ Interactive CLI utility for getting Kubernetes cluster credentials. Utility is u
 ## Installation
 
 ```
-$ go get github.com/kubaj/kubeauth
+$ go get github.com/brandon-height/kubeauth
 ```
 
 ## Usage
@@ -19,4 +19,6 @@ $ kubeauth
 ```
 Use arrows for selecting account, project or cluster.
 
-![](https://i.imgur.com/NDoihtD.gif)
+
+![Terminal Example](./example_term.svg)
+<img src="./example_term.svg">

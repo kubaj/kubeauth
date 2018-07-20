@@ -98,3 +98,17 @@ func (g *GCloudProvider) SelectCluster(cluster string) error {
 	zone := strings.Split(cluster, "\t")[1]
 	return exec.Command("gcloud", "container", "clusters", "get-credentials", clusterID, "--zone", zone, "--project", g.ProjectID).Run()
 }
+
+// ReadNamespaces attempts to find any namespaces associated to
+// a given cluster and make them available for selection.
+func (g *GCloudProvider) ReadNamespaces(cluster string) ([]string, error) {
+	kubeConfig := KubeConfig{}
+	contexts, err := kubeConfig.ReadContexts(cluster)
+	return contexts, err
+}
+
+// SelectContext selects a particular kube context
+func (g *GCloudProvider) SelectContext(context string) error {
+	kubeConfig := KubeConfig{}
+	return kubeConfig.SelectContext(context)
+}
