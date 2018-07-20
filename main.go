@@ -1,19 +1,27 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
-	"github.com/kubaj/kubeauth/providers"
+	"github.com/brandon-height/kubeauth/providers"
 	"gopkg.in/AlecAivazis/survey.v1"
 )
 
+var (
+	// Version is the current version found in `VERSION` file.
+	Version string
+	// Build is the output of `git rev-parse HEAD`
+	Build string
+)
+
 func main() {
+	fmt.Printf("version=%s, build=%s\n", Version, Build)
 	gcloud := providers.GCloudProvider{}
 	accs, err := gcloud.ReadAccounts()
 	if err != nil {
 		log.Fatalln(err)
 	}
-
 	if len(accs) == 0 {
 		log.Fatalln("google-cloud-sdk is not authentificated to any account")
 	}
@@ -76,4 +84,25 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
+	contexts, err := gcloud.ReadNamespaces(cluster)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	context := ""
+	survey.AskOne(
+		&survey.Select{
+			Message: "Choose a context:",
+			Options: contexts,
+		},
+		&context,
+		nil,
+	)
+
+	err = gcloud.SelectContext(context)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
 }
